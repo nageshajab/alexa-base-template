@@ -20,6 +20,7 @@ const HelloWorldIntentHandler = {
         && request.intent.name === 'HelloWorldIntent';
     },
     handle(handlerInput) {
+     
       return handlerInput.responseBuilder
         .speak('alexa says hello world')
         .getResponse();
@@ -98,6 +99,20 @@ const IntentReflectorHandler = {
     }
 };
 
+const ErrorHandler = {
+    canHandle() {
+        return true;
+    },
+    handle(handlerInput, error) {
+        console.log(`~~~~ Error handled: ${error.stack}`);
+        const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt(speakOutput)
+            .getResponse();
+    }
+};
 
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
@@ -108,5 +123,8 @@ exports.handler = Alexa.SkillBuilders.custom()
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler, // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+    )
+    .addErrorHandlers(
+        ErrorHandler,
     )
     .lambda();
