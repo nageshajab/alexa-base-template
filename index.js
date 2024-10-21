@@ -1,4 +1,5 @@
 const Alexa = require('ask-sdk-core');
+const { LogRequestInterceptor, LogResponseInterceptor } = require('./interceptor');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -127,4 +128,6 @@ exports.handler = Alexa.SkillBuilders.custom()
     .addErrorHandlers(
         ErrorHandler,
     )
+    .addRequestInterceptors(LogRequestInterceptor) // Add the interceptor here
+    .addResponseInterceptors(LogResponseInterceptor) // Add the interceptor here
     .lambda();
